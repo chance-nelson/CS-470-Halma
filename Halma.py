@@ -60,14 +60,12 @@ class Halma:
         if tLimit > 0:
             self.tLimit = tLimit
 
-        pprint(self.board)
-
 
     def checkForWin(self):
         counter = 0
         for i in range(0, 3):
-            for j in i:
-                if j == 5:
+            for j in range(0, 3):
+                if self.board[i][j] == 5:
                     counter += 1
 
         if counter == 10:
@@ -75,9 +73,9 @@ class Halma:
             return True
 
         counter = 0
-        for i in range(len(self.board) - 4, len(board) - 1):
-            for j in i:
-                if j == 4:
+        for i in range(len(self.board) - 4, len(self.board) - 1):
+            for j in range(0, len(self.board)):
+                if self.board[i][j] == 4:
                     counter += 1
 
         if counter == 10:
@@ -93,6 +91,8 @@ class Halma:
         possibleNeighbors = [(x-1, y-1), (x, y-1), (x+1, y), (x+1, y+1),
                             (x, y+1), (x-1, y), (x-1, y+1), (x+1, x-1)]
         
+        jumps = []
+
         i = 0
         while i < len(possibleNeighbors):
             # Prune out invalid spaces
@@ -114,95 +114,46 @@ class Halma:
 
             if possibleNeighbors[i] == (x-1, y-1):
                 if 0 <= x-2 < len(self.board) and 0 <= y-2 < len(self.board):
-                    if self.board[x-2][y-2] != 0:
-                        possibleNeighbors.remove(possibleNeighbors[i])
-                        i = 0
-                        continue
-                else:
-                    possibleNeighbors.remove(possibleNeighbors[i])
-                    i = 0
-                    continue
+                    if self.board[x-2][y-2] in [0, 3]:
+                        jumps.append((x-2, y-2))
  
             if possibleNeighbors[i] == (x, y-1):
                 if 0 <= y-2 < len(self.board):
-                    if self.board[x][y-2] != 0:
-                        possibleNeighbors.remove(possibleNeighbors[i])
-                        i = 0
-                        continue
-                else:
-                    possibleNeighbors.remove(possibleNeighbors[i])
-                    i = 0
-                    continue
+                    if self.board[x][y-2] in [0, 3]:
+                        jumps.append((x, y-2))
                   
             if possibleNeighbors[i] == (x+1, y):
                 if 0 <= x+2 < len(self.board):
-                    if self.board[x+2][y] != 0:
-                        possibleNeighbors.remove(possibleNeighbors[i])
-                        i = 0
-                        continue
-                else:
-                    possibleNeighbors.remove(possibleNeighbors[i])
-                    continue
+                    if self.board[x+2][y] in [0, 3]:
+                        jumps.append((x+2, y))
 
             if possibleNeighbors[i] == (x+1, y+1):
                 if 0 <= x+2 < len(self.board) and 0 <= y+2 < len(self.board):
-                    if self.board[x+2][y+2] != 0:
-                        possibleNeighbors.remove(possibleNeighbors[i])
-                        i = 0
-                        continue
-                else:
-                    possibleNeighbors.remove(possibleNeighbors[i])
-                    i = 0
-                    continue
+                    if self.board[x+2][y+2] in [0, 3]:
+                        jumps.append((x+2, y+2))
 
             if possibleNeighbors[i] == (x, y+1):
                 if 0 <= y+2 < len(self.board):
-                    if self.board[x][y+2] != 0:
-                        possibleNeighbors.remove(possibleNeighbors[i])
-                        i = 0
-                        continue
-                else:
-                    possibleNeighbors.remove(possibleNeighbors[i])
-                    i = 0
-                    continue
+                    if self.board[x][y+2] in [0, 3]:
+                        jumps.append((x, y+2))
 
             if possibleNeighbors[i] == (x-1, y):
                 if 0 <= x-2 < len(self.board):
-                    if self.board[x-2][y] != 0:
-                        possibleNeighbors.remove(possibleNeighbors[i])
-                        i = 0
-                        continue
-                else:
-                    possibleNeighbors.remove(possibleNeighbors[i])
-                    i = 0
-                    continue
+                    if self.board[x-2][y] in [0, 3]:
+                        jumps.append((x-2, y))
  
             if possibleNeighbors[i] == (x-1, y+1):
                 if 0 <= x-2 < len(self.board) and 0 <= y+2 < len(self.board):
-                    if self.board[x-2][y+2] != 0:
-                        possibleNeighbors.remove(possibleNeighbors[i])
-                        i = 0
-                        continue
-                else:
-                    possibleNeighbors.remove(possibleNeighbors[i])
-                    i = 0
-                    continue
+                    if self.board[x-2][y+2] in [0, 3]:
+                        jumps.append((x-2, y+2))
 
             if possibleNeighbors[i] == (x+1, y-1):
                 if 0 <= x+2 < len(self.board) and 0 <= y-2 < len(self.board):
-                    if self.board[x+2][y-2] != 0:
-                        possibleNeighbors.remove(possibleNeighbors[i])
-                        i = 0
-                        continue
-                else:
-                    possibleNeighbors.remove(possibleNeighbors[i])
-                    i = 0
-                    continue
+                    if self.board[x+2][y-2] in [0, 3]:
+                        jumps.append((x+2, y-2))
 
             i = i + 1
-
-        return possibleNeighbors
- 
+        return jumps 
  
     def getLegalMoves(self, x, y):
         moveList = [(x, y)]
@@ -245,7 +196,7 @@ class Halma:
 
     
     def makeMove(self, moveFrom, moveTo):
-        if moveTo not in getLegalMoves(moveFrom[0], moveFrom[1]):
+        if moveTo not in self.getLegalMoves(moveFrom[0], moveFrom[1]):
             raise ValueError("Invalid Move")
         else:
             if self.board[moveFrom[0]][moveFrom[1]] == 4 or self.board[moveFrom[0]][moveFrom[1]] == 5:
@@ -254,11 +205,11 @@ class Halma:
                 self.board[moveFrom[0]][moveFrom[1]] = 0
 
             if self.board[moveTo[0]][moveTo[1]] == 0:
-                self.board[moveTo[0]][moveTo[1]] = self.currentPlayer
+                self.board[moveTo[0]][moveTo[1]] = self.currentMove
             else:
-                self.board[moveTo[0]][moveTo[1]] = 3 + self.currentPlayer
+                self.board[moveTo[0]][moveTo[1]] = 3 + self.currentMove
 
-        if self.currentPlayer == 1:
-            self.currentPlayer = 2
+        if self.currentMove == 1:
+            self.currentMove = 2
         else:
-            self.currentPlayer = 1
+            self.currentMove = 1

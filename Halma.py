@@ -87,115 +87,161 @@ class Halma:
         return False 
 
     
-    def getJumps(chords):
-        x = chords[0]
-        y = chords[1]
-
+    def getJumps(self, x, y):
         player = self.board[x][y]
 
         possibleNeighbors = [(x-1, y-1), (x, y-1), (x+1, y), (x+1, y+1),
                             (x, y+1), (x-1, y), (x-1, y+1), (x+1, x-1)]
         
-        for i in possibleNeighbors:
+        i = 0
+        while i < len(possibleNeighbors):
             # Prune out invalid spaces
-            if i[0] == -1 or i[0] == len(self.board):
-                possibleNeighbors.remove(i)
+            if possibleNeighbors[i][0] == -1 or possibleNeighbors[i][0] == len(self.board):
+                possibleNeighbors.remove(possibleNeighbors[i])
+                i = 0
+                continue
+
+            if possibleNeighbors[i][1] == -1 or possibleNeighbors[i][1] == len(self.board):
+                possibleNeighbors.remove(possibleNeighbors[i])
+                i = 0
                 continue
 
             # Prune out neighboring spaces that do not contain a piece
-            if i == 0:
-                possibleNeighbors.remove(i)
+            if self.board[possibleNeighbors[i][0]][possibleNeighbors[i][1]] == 0:
+                possibleNeighbors.remove(possibleNeighbors[i])
+                i = 0
                 continue
 
-            if i == (x-1, y-1):
+            if possibleNeighbors[i] == (x-1, y-1):
                 if 0 <= x-2 < len(self.board) and 0 <= y-2 < len(self.board):
                     if self.board[x-2][y-2] != 0:
-                        possibleNeighbors.remove(i)
+                        possibleNeighbors.remove(possibleNeighbors[i])
+                        i = 0
                         continue
                 else:
-                    possibleNeighbors.remove(i)
+                    possibleNeighbors.remove(possibleNeighbors[i])
+                    i = 0
                     continue
  
-            if i == (x, y-1):
+            if possibleNeighbors[i] == (x, y-1):
                 if 0 <= y-2 < len(self.board):
                     if self.board[x][y-2] != 0:
-                        possibleNeighbors.remove(i)
+                        possibleNeighbors.remove(possibleNeighbors[i])
+                        i = 0
                         continue
                 else:
-                    possibleNeighbors.remove(i)
+                    possibleNeighbors.remove(possibleNeighbors[i])
+                    i = 0
                     continue
                   
-            if i == (x+1, y):
+            if possibleNeighbors[i] == (x+1, y):
                 if 0 <= x+2 < len(self.board):
                     if self.board[x+2][y] != 0:
-                        possibleNeighbors.remove(i)
+                        possibleNeighbors.remove(possibleNeighbors[i])
+                        i = 0
                         continue
                 else:
-                    possibleNeighbors.remove(i)
+                    possibleNeighbors.remove(possibleNeighbors[i])
                     continue
 
-            if i == (x+1, y+1):
+            if possibleNeighbors[i] == (x+1, y+1):
                 if 0 <= x+2 < len(self.board) and 0 <= y+2 < len(self.board):
                     if self.board[x+2][y+2] != 0:
-                        possibleNeighbors.remove(i)
+                        possibleNeighbors.remove(possibleNeighbors[i])
+                        i = 0
                         continue
                 else:
-                    possibleNeighbors.remove(i)
+                    possibleNeighbors.remove(possibleNeighbors[i])
+                    i = 0
                     continue
 
-            if i == (x, y+1):
+            if possibleNeighbors[i] == (x, y+1):
                 if 0 <= y+2 < len(self.board):
                     if self.board[x][y+2] != 0:
-                        possibleNeighbors.remove(i)
+                        possibleNeighbors.remove(possibleNeighbors[i])
+                        i = 0
                         continue
                 else:
-                    possibleNeighbors.remove(i)
+                    possibleNeighbors.remove(possibleNeighbors[i])
+                    i = 0
                     continue
 
-            if i == (x-1, y):
+            if possibleNeighbors[i] == (x-1, y):
                 if 0 <= x-2 < len(self.board):
                     if self.board[x-2][y] != 0:
-                        possibleNeighbors.remove(i)
+                        possibleNeighbors.remove(possibleNeighbors[i])
+                        i = 0
                         continue
                 else:
-                    possibleNeighbors.remove(i)
+                    possibleNeighbors.remove(possibleNeighbors[i])
+                    i = 0
                     continue
  
-            if i == (x-1, y+1):
+            if possibleNeighbors[i] == (x-1, y+1):
                 if 0 <= x-2 < len(self.board) and 0 <= y+2 < len(self.board):
                     if self.board[x-2][y+2] != 0:
-                        possibleNeighbors.remove(i)
+                        possibleNeighbors.remove(possibleNeighbors[i])
+                        i = 0
                         continue
                 else:
-                    possibleNeighbors.remove(i)
+                    possibleNeighbors.remove(possibleNeighbors[i])
+                    i = 0
                     continue
 
-            if i == (x+1, y-1):
+            if possibleNeighbors[i] == (x+1, y-1):
                 if 0 <= x+2 < len(self.board) and 0 <= y-2 < len(self.board):
                     if self.board[x+2][y-2] != 0:
-                        possibleNeighbors.remove(i)
+                        possibleNeighbors.remove(possibleNeighbors[i])
+                        i = 0
                         continue
                 else:
-                    possibleNeighbors.remove(i)
+                    possibleNeighbors.remove(possibleNeighbors[i])
+                    i = 0
                     continue
 
-            return possibleNeighbors
+            i = i + 1
+
+        return possibleNeighbors
  
  
     def getLegalMoves(self, x, y):
         moveList = [(x, y)]
-
-        for i in moveList:
-            moveList.extend(self.getJumps(i))
+        
+        i = 0
+        while i < len(moveList):
+            moves = self.getJumps(moveList[i][0], moveList[i][1])
+            if moves:
+                for move in moves:
+                    if move not in moveList:
+                        moveList.append(move)
+                        i = -1
+            i = i + 1
 
         possibleMoves = [(x-1, y-1), (x, y-1), (x+1, y), (x+1, y+1),
                          (x, y+1), (x-1, y), (x-1, y+1), (x+1, x-1)]
 
-        for i in possibleMoves:
-            if i[0] == -1 or i[0] == len(self.board):
-                possibleMoves.remove(i)
-
         moveList.extend(possibleMoves)
+
+        i = 0
+        while i < len(moveList):
+            if (moveList[i][0] == -1) or (moveList[i][0] == len(self.board)):
+                moveList.remove(moveList[i])
+                i = 0
+                continue
+
+            elif (moveList[i][1] == -1) or (moveList[i][1] == len(self.board)):
+                moveList.remove(moveList[i])
+                i = 0
+                continue
+
+            elif self.board[moveList[i][0]][moveList[i][1]] in [1, 2, 4, 5]:
+                moveList.remove(moveList[i])
+                i = 0
+                continue
+            
+            i = i + 1
+
+        return moveList
 
     
     def makeMove(self, moveFrom, moveTo):

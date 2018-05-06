@@ -49,6 +49,18 @@ class Halma:
                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5],
                           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5]]
         
+        
+        elif boardFile:
+            with open(boardFile, "r") as f:
+                lineNo = 0
+                line = f.readline()
+                while line != '':
+                    print(lineNo)
+                    self.board.append([])
+                    self.board[lineNo].append([int(i) for i in line.split(' ')])
+                    lineNo += 1
+                    line = f.readline()
+        
         else:
             raise ValueError("Invalid board size")
 

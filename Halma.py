@@ -89,7 +89,7 @@ class Halma:
         player = self.board[x][y]
 
         possibleNeighbors = [(x-1, y-1), (x, y-1), (x+1, y), (x+1, y+1),
-                            (x, y+1), (x-1, y), (x-1, y+1), (x+1, x-1)]
+                            (x, y+1), (x-1, y), (x-1, y+1), (x+1, y-1)]
         
         jumps = []
 
@@ -112,6 +112,10 @@ class Halma:
                 i = 0
                 continue
 
+            i += 1
+
+        i = 0
+        while i < len(possibleNeighbors):
             if possibleNeighbors[i] == (x-1, y-1):
                 if 0 <= x-2 < len(self.board) and 0 <= y-2 < len(self.board):
                     if self.board[x-2][y-2] in [0, 3]:
@@ -153,6 +157,7 @@ class Halma:
                         jumps.append((x+2, y-2))
 
             i = i + 1
+    
         return jumps 
  
     def getLegalMoves(self, x, y):
@@ -165,11 +170,13 @@ class Halma:
                 for move in moves:
                     if move not in moveList:
                         moveList.append(move)
-                        i = -1
+                        
+                i = i + len(moves) - 1
             i = i + 1
 
         possibleMoves = [(x-1, y-1), (x, y-1), (x+1, y), (x+1, y+1),
-                         (x, y+1), (x-1, y), (x-1, y+1), (x+1, x-1)]
+                         (x, y+1), (x-1, y), (x-1, y+1), (x+1, y-1)]
+
 
         moveList.extend(possibleMoves)
 
@@ -191,6 +198,7 @@ class Halma:
                 continue
             
             i = i + 1
+ 
 
         return moveList
 

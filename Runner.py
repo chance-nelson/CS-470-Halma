@@ -69,8 +69,12 @@ class Game(tk.Frame):
         # Get a list of coords that are legal moves for x and y
         for i in self.legalMoves:
             if i[0] == (x, y):
+                print(i[1])
                 self.buttons[i[1][0]][i[1][1]].config(image=self.SELECT)
                 self.buttons[i[1][0]][i[1][1]].image = self.SELECT
+
+        print("_____")
+        print(self.legalMoves)
 
 
     def prepareMove(self, x, y):       

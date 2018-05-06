@@ -57,7 +57,7 @@ class Halma:
                 while line != '':
                     print(lineNo)
                     self.board.append([])
-                    self.board[lineNo].append([int(i) for i in line.split(' ')])
+                    self.board[lineNo] = [int(i) for i in line.split(' ')]
                     lineNo += 1
                     line = f.readline()
         
@@ -77,6 +77,7 @@ class Halma:
         counter = 0
         for i in range(0, 3):
             for j in range(0, 3):
+                print(i, j)
                 if self.board[i][j] == 5:
                     counter += 1
 

@@ -14,7 +14,10 @@ class Player():
     def minimax(self, node, player):
         if self.moveTimer < 0.2:
             return None
-            
+
+        if node.getValue() == 10:
+            return child
+
         if node.getChildren() == None:
             return getScore(player)
 

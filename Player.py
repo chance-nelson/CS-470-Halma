@@ -56,7 +56,7 @@ class Node:
     def __init__(self, value=None):
         self.value = value
         self.minOrMax = None
-        self.nextNode = None
+        self.children = []
         self.parent = None
 
     def getValue(self):
@@ -71,25 +71,8 @@ class Node:
     def getMinMaxValue():
 
 
-class miniMaxList:
+class miniMaxTree:
     def __init__(self, root):
         self.root = Node()
 
-    def addNode(self, newNode):
-        if root.value == None:
-            self.root = newNode
-            newNode.minOrMax = "Max"
-            newNode.next = None
-        else:
-            current = self.root
-            while self.next != None:
-                current.getNext()
-            current.next = newNode
-
-            if current.minOrMax == "Max":
-                newNode.minOrMax = "Min"
-            else:
-                newNode.minOrMax = "Max"
-
-            newNode.parent = current
-            newNode.next = None
+    def createTree

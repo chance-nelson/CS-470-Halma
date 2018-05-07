@@ -1,3 +1,4 @@
+import copy
 import math
 from Halma import Halma
 
@@ -7,9 +8,10 @@ class Player():
         self.turn = False
         self.moveTimer = game.tLimit
 
-    def makeMove(self, game):
-        #TODO
-        return None
+    def recommendMove(game):
+        miniMaxTree = MiniMax()
+        move = minimax(miniMaxTree.root, self.player)
+        return move.state
 
     def minimax(self, node, player):
         if self.moveTimer < 0.2:
@@ -29,7 +31,7 @@ class Player():
                     max = childMax
             return max
 
-        elif node.getMinMaxValue(node) = "min"
+        elif node.getMinMaxValue(node) == "min":
             min = getChildren(node)[0]
             for child in node.getChildren():
                 childMin = minimax(child, player)
@@ -76,26 +78,59 @@ class Player():
         return winningLocations
 
 class Node:
-    def __init__(self, value=None):
-        self.value = value
-        self.minOrMax = None
+    def __init__(self, state, scores, minOrMax, parent=None):
+        self.state = state
+        self.scores = scores
+        self.minOrMax = minOrMax
         self.children = []
-        self.parent = None
+        self.parent = parent
 
-    def getValue(self):
-        return self.value
+class MiniMax:
+    def __init__(self, rootGameState, player, depth=3):
+        # Create root node
+        self.player = player
+        self.depth = depth
+        self.root = Node(rootGameState, (rootGameState.getScore(1), rootGameState.getScore(2)), True)
+        self.buildTree(self.root, self.depth)
 
-    def getNext():
-        return self.nextNode
+    def buildTree(self, current, depth):
+        if depth == 0:
+            return
 
-    def getParent():
-        return self.parent
+        # Get the legal moves for the current player
+        legalMoves = []
+        for indexI, i in enumerate(current.state.board):
+            for indexJ, j, in enumerate(i):
+                if j in [current.state.currentMove, current.state.currentMove + 3]:
+                    # For each legal move, generate a new game state and add it to the children of current
+                    for move in current.state.getLegalMoves(indexI, indexJ):
+                        newState = copy.deepcopy(current.state)
+                        newState.makeMove((indexI, indexJ), (move[0], move[1]))
+                        child = Node(newState, (newState.getScore(1), newState.getScore(2)), not current.minOrMax, parent=current)
+                        current.children.append(child)
 
-    def getMinMaxValue():
+        # Recurse into most likely child
+        best = (None, None)
 
+        for i in current.children:
+            if i.state.getScore(1) == 10 or i.state.getScore(2) == 10:
+                continue
 
-class miniMaxTree:
-    def __init__(self, root):
-        self.root = Node()
+            if self.player == 1:
+                evaluate = i.state.getScore(1) - i.state.getScore(2)
+            else:
+                evaluate = i.state.getScore(2) - i.state.getScore(1)
 
-    def createTree
+            if best[0] == None:
+                best = (i, evaluate)
+                continue
+            elif i.minOrMax and best[1] < evaluate:
+                best = (i, evaluate)
+                continue
+            elif not i.minOrMax and best[1] > evaluate:
+                best = (i, evaluate)
+                continue
+
+            current.children.remove(i)
+
+        self.buildTree(best[0], depth-1)

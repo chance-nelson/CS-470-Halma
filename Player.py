@@ -8,9 +8,10 @@ class Player():
         self.turn = False
         self.moveTimer = game.tLimit
 
-    def makeMove(self, game):
-        #TODO
-        return None
+    def recommendMove(game):
+        miniMaxTree = MiniMax()
+        move = minimax(miniMaxTree.root, self.player)
+        return move.state
 
     def minimax(self, node, player):
         if self.moveTimer < 0.2:
@@ -30,7 +31,7 @@ class Player():
                     max = childMax
             return max
 
-        elif node.getMinMaxValue(node) = "min"
+        elif node.getMinMaxValue(node) == "min":
             min = getChildren(node)[0]
             for child in node.getChildren():
                 childMin = minimax(child, player)
@@ -129,7 +130,7 @@ class MiniMax:
             elif not i.minOrMax and best[1] > evaluate:
                 best = (i, evaluate)
                 continue
-            
+                
             current.children.remove(i)
 
         self.buildTree(best[0], depth-1)

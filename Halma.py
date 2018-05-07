@@ -241,7 +241,7 @@ class Halma:
         openGoals = []
 
         # Get the number of pieces in the goal
-        if player == 1:
+        if player == 2:
             for i in range(0, 4):
                 for j in range(0, 4):
                     if self.board[i][j] == 5:
@@ -249,7 +249,7 @@ class Halma:
                     elif self.board[i][j] == 3:
                         openGoals.append((i, j))
 
-        elif player == 2:
+        elif player == 1:
             for i in range(len(self.board) - 4, len(self.board)):
                 for j in range(0, len(self.board)):
                     if self.board[i][j] == 4:
@@ -264,7 +264,7 @@ class Halma:
         else:
             # get list of pieces
             pieces = []
-            for indexI, i in enumerate(this.board):
+            for indexI, i in enumerate(self.board):
                 for indexJ, j in enumerate(i):
                     if j == player:
                         pieces.append((indexI, indexJ))
@@ -275,15 +275,16 @@ class Halma:
                 for i in pieces:
                     for j in openGoals:
                         # Calculate shortest SLD to goal for piece
-                        dist = (i[0] - j[0])^2 - (i[1] - j[1])^2
+                        dist = math.pow(i[0] - j[0], 2) + math.pow(i[1] - j[1], 2)
 
                         if dist < shortest[2]:
                             shortest = (i, j, dist)
-                
+               
                 pieces.remove(shortest[0])
                 openGoals.remove(shortest[1])
 
-                score += (1 / math.sqrt(shortest))
+                dist = math.pow(shortest[0][0] - shortest[1][0], 2) - math.pow(shortest[0][1] - shortest[1][1], 2)
+                score += (1 / math.sqrt(shortest[2]))
                 freePieces -= 1
 
             return score

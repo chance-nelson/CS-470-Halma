@@ -10,41 +10,33 @@ class Player():
 
     def recommendMove(self, game, player):
         miniMaxTree = MiniMax(miniMaxTree.root, player, 10)
-        move = minimax(miniMaxTree.root, player)
+        move = self.minimax(game, player)
         return move.state
 
     def minimax(self, node, player):
-        if self.moveTimer < 0.2:
-            return None
 
-        if node.getScore(player) == 10:
+        if node.state.getScore(2) == 10:
             return child
 
         if node.children == []:
-            return node.state.getScore(player)
+            return node.state.getScore(2)-node.state.getScore(1)
 
         if node.minOrMax == True:
-            maxScore = node.state.getScore(player)
-            max = node.children[0]
+            maxScore = node.state.getScore(2)-node.state.getScore(1)
             for child in node.children:
                 childMax = self.minimax(child, player)
-                childMaxScore = childMax.state.getScore(player)
-                if childMaxScore > maxScore:
+                if childMax > maxScore:
                     maxScore = childMaxScore
-                    max = childMax
 
-            return max
+            return maxScore
 
         if node.minOrMax == False:
-            minScore = node.state.getScore(player)
-            min = node.children[0]
+            minScore = node.state.getScore(2)-node.state.getScore(1)
             for child in node.children:
                 childMin = self.minimax(child, player)
-                childMinScore = childMin.state.getScore(player)
-                if childMinScore < minScore:
+                if childMin < minScore:
                     minScore = childMinScore
-                    min = childMin
-
+                    
             return min
 
     def rankDistanceFromGoal(self, game, player):

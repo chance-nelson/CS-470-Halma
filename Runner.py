@@ -2,11 +2,12 @@
 
 import tkinter as tk
 from Halma import Halma
+import player
 
 class Game(tk.Frame):
     def __init__(self, master=None):
         # Initialize game object and helpers
-        self.game = Halma(-1, 100, 0, 'victory.sav')
+        self.game = Halma(8, 1, 0)
         self.lastMove = None
         self.legalMoves = self.getLegalMovesForPlayer(self.game.currentMove)
         self.moveFrom = None
@@ -99,8 +100,6 @@ class Game(tk.Frame):
                     self.legalMoves = self.getLegalMovesForPlayer(self.game.currentMove)
                     
                     self.game.checkForWin()
-                    print(self.game.checkForWin())
-                    print(self.game.win)
 
                     if self.game.win == 0:
                         self.status.delete("1.0", tk.END)
@@ -129,8 +128,6 @@ class Game(tk.Frame):
 
         letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
         numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-
-        print("Inserting Indicators...")
 
         self.topIndicators = [-1 for i in range(len(self.game.board))]
         for i in range(len(self.game.board)):

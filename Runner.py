@@ -2,12 +2,18 @@
 
 import tkinter as tk
 from Halma import Halma
-import player
+import Player
+import sys
 
 class Game(tk.Frame):
     def __init__(self, master=None):
         # Initialize game object and helpers
-        self.game = Halma(8, 1, 0)
+        self.aiPlayer = int(sys.argv[1])
+        if self.aiPlayer == 1:
+            self.game = Halma(8, 1, 0)
+        else:
+            self.game = Halma(8, 1, 1)
+
         self.lastMove = None
         self.legalMoves = self.getLegalMovesForPlayer(self.game.currentMove)
         self.moveFrom = None
@@ -42,8 +48,7 @@ class Game(tk.Frame):
         if ((fromX, fromY), (toX, toY)) in self.legalMoves:
             self.game.makeMove((fromX, fromY), (toX, toY))
             self.lastMove = ((fromX, fromY), (toX, toY))
-        self.updateBoard()
-
+        self.updateBoard() 
 
     def updateBoard(self):
         for indexI, i in enumerate(self.buttons):
@@ -70,7 +75,6 @@ class Game(tk.Frame):
         # Get a list of coords that are legal moves for x and y
         for i in self.legalMoves:
             if i[0] == (x, y):
-                print(i[1])
                 self.buttons[i[1][0]][i[1][1]].config(image=self.SELECT)
                 self.buttons[i[1][0]][i[1][1]].image = self.SELECT
 
@@ -104,6 +108,11 @@ class Game(tk.Frame):
                     if self.game.win == 0:
                         self.status.delete("1.0", tk.END)
                         self.status.insert(tk.INSERT, "Turn: " + self.players[self.game.currentMove])
+                        if self.currentMove == self.aiPlayer:
+                            ai = player.Player(self.game, self.aiPlayer)
+                            self.game = ai.recommendMove(self.game, self.aiPlayer)
+                            self.status.delete("1.0", tk.END)
+                            self.status.insert(tk.INSERT, "Turn: " + self.players[self.game.currentMove])
                     else:
                         self.status.delete("1.0", tk.END)
                         self.status.insert(tk.INSERT, "WIN: " + self.players[self.game.currentMove])

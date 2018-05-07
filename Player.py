@@ -8,35 +8,43 @@ class Player():
         self.turn = False
         self.moveTimer = game.tLimit
 
-    def recommendMove(game):
-        miniMaxTree = MiniMax()
-        move = minimax(miniMaxTree.root, self.player)
+    def recommendMove(self, game, player):
+        miniMaxTree = MiniMax(miniMaxTree.root, player, 10)
+        move = minimax(miniMaxTree.root, player)
         return move.state
 
     def minimax(self, node, player):
         if self.moveTimer < 0.2:
             return None
 
-        if node.getValue() == 10:
+        if node.getScore(player) == 10:
             return child
 
         if node.getChildren() == None:
             return getScore(player)
 
         if node.getMinMaxValue(node) == "max":
+            maxScore = getChildren(node)[0].getScore(player)
             max = getChildren(node)[0]
             for child in node.getChildren():
                 childMax = minimax(child, player)
-                if childMax > max:
+                childMaxScore = childMax.getScore(player)
+                if childMaxScore > maxScore:
+                    maxScore = childMaxScore
                     max = childMax
+
             return max
 
-        elif node.getMinMaxValue(node) == "min":
+        if node.getMinMaxValue(node) == "min":
+            minScore = getChildren(node)[0].getScore(player)
             min = getChildren(node)[0]
             for child in node.getChildren():
                 childMin = minimax(child, player)
-                if childMin < min:
+                childMinScore = childMin.getScore(player)
+                if childMinScore < minScore:
+                    minScore = childMinScore
                     min = childMin
+
             return min
 
     def rankDistanceFromGoal(self, game, player):

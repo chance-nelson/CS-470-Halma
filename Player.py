@@ -1,3 +1,4 @@
+import copy
 import math
 from Halma import Halma
 
@@ -53,21 +54,59 @@ class Player():
         return winningLocations
 
 class Node:
-    def __init__(self, value=None):
-        self.value = value
-        self.nextNodes = []
+    def __init__(self, state, scores, minOrMax, parent=None):
+        self.state = state
+        self.scores = scores
+        self.minOrMax = minOrMax
+        self.children = []
+        self.parent = parent
 
-    def getValue(self):
-        return self.value
+class MiniMax:
+    def __init__(self, rootGameState, player, depth=3):
+        # Create root node
+        self.player = player
+        self.depth = depth
+        self.root = Node(rootGameState, (rootGameState.getScore(1), rootGameState.getScore(2)), True)
+        self.buildTree(self.root, self.depth)
 
-    def getNext():
-        return self.nextNodes
+    def buildTree(self, current, depth):
+        if depth == 0:
+            return
 
-class miniMaxList:
-    def __init__(self, root):
-        self.root = Node()
+        # Get the legal moves for the current player
+        legalMoves = []
+        for indexI, i in enumerate(current.state.board):
+            for indexJ, j, in enumerate(i):
+                if j in [current.state.currentMove, current.state.currentMove + 3]:
+                    # For each legal move, generate a new game state and add it to the children of current
+                    for move in current.state.getLegalMoves(indexI, indexJ):
+                        newState = copy.deepcopy(current.state)
+                        newState.makeMove((indexI, indexJ), (move[0], move[1]))
+                        child = Node(newState, (newState.getScore(1), newState.getScore(2)), not current.minOrMax, parent=current)
+                        current.children.append(child)
 
-    def addNode(self, newNode):
-        if root.value == None:
-            self.root = newNode
-            newNode.nextNodes = []
+        # Recurse into most likely child
+        best = (None, None)
+
+        for i in current.children:
+            if i.state.getScore(1) == 10 or i.state.getScore(2) == 10:
+                continue
+            
+            if self.player == 1:
+                evaluate = i.state.getScore(1) - i.state.getScore(2)
+            else:
+                evaluate = i.state.getScore(2) - i.state.getScore(1)
+            
+            if best[0] == None:
+                best = (i, evaluate)
+                continue
+            elif i.minOrMax and best[1] < evaluate:
+                best = (i, evaluate)
+                continue
+            elif not i.minOrMax and best[1] > evaluate:
+                best = (i, evaluate)
+                continue
+            
+            current.children.remove(i)
+
+        self.buildTree(best[0], depth-1)

@@ -1,4 +1,5 @@
 from pprint import pprint
+import math
 
 class Halma:
     def __init__(self, size, tLimit, hPlayer, boardFile=None):
@@ -233,3 +234,57 @@ class Halma:
             self.currentMove = 2
         else:
             self.currentMove = 1
+
+
+    def getScore(self, player):
+        score = 0
+        openGoals = []
+
+        # Get the number of pieces in the goal
+        if player == 1:
+            for i in range(0, 4):
+                for j in range(0, 4):
+                    if self.board[i][j] == 5:
+                        score += 1
+                    elif self.board[i][j] == 3:
+                        openGoals.append((i, j))
+
+        elif player == 2:
+            for i in range(len(self.board) - 4, len(self.board)):
+                for j in range(0, len(self.board)):
+                    if self.board[i][j] == 4:
+                        score += 1
+                    elif self.board[i][j] == 3:
+                        openGoals.append((i, j))
+
+        # If score is not 10 (victory), calculate SLD for remaining pieces
+        if score == 10:
+            return 10
+
+        else:
+            # get list of pieces
+            pieces = []
+            for indexI, i in enumerate(this.board):
+                for indexJ, j in enumerate(i):
+                    if j == player:
+                        pieces.append((indexI, indexJ))
+
+            freePieces = len(pieces)
+            while freePieces > 0:
+                shortest = (None, None, 9999999999)
+                for i in pieces:
+                    for j in openGoals:
+                        # Calculate shortest SLD to goal for piece
+                        dist = (i[0] - j[0])^2 - (i[1] - j[1])^2
+
+                        if dist < shortest[2]:
+                            shortest = (i, j, dist)
+                
+                pieces.remove(shortest[0])
+                openGoals.remove(shortest[1])
+
+                score += (1 / math.sqrt(shortest))
+                freePieces -= 1
+
+            return score
+

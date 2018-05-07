@@ -16,28 +16,28 @@ class Player():
     def minimax(self, node, player):
 
         if node.state.getScore(2) == 10:
-            return child
+            return (node.state.getScore(2), node.state)
 
         if node.children == []:
-            return node.state.getScore(2)-node.state.getScore(1)
+            return (node.state.getScore(2)-node.state.getScore(1), node.state)
 
         if node.minOrMax == True:
-            maxScore = node.state.getScore(2)-node.state.getScore(1)
+            maxScore = (node.state.getScore(2)-node.state.getScore(1), node.state)
             for child in node.children:
                 childMax = self.minimax(child, player)
                 if childMax > maxScore:
-                    maxScore = childMaxScore
+                    maxScore = (childMax[0], childMax[1])
 
             return maxScore
 
         if node.minOrMax == False:
-            minScore = node.state.getScore(2)-node.state.getScore(1)
+            minScore = (node.state.getScore(2)-node.state.getScore(1), node.state)
             for child in node.children:
                 childMin = self.minimax(child, player)
-                if childMin < minScore:
-                    minScore = childMinScore
-                    
-            return min
+                if childMin[0] < minScore[0]:
+                    minScore = (childMin[0], childMin[1])
+
+            return minScore
 
     def rankDistanceFromGoal(self, game, player):
         pawns = self.getPawnLocations(game, player)

@@ -6,7 +6,7 @@ from Halma import Halma
 class Game(tk.Frame):
     def __init__(self, master=None):
         # Initialize game object and helpers
-        self.game = Halma(8, 100, 0)
+        self.game = Halma(-1, 100, 0, 'victory.sav')
         self.lastMove = None
         self.legalMoves = self.getLegalMovesForPlayer(self.game.currentMove)
         self.moveFrom = None
@@ -73,9 +73,6 @@ class Game(tk.Frame):
                 self.buttons[i[1][0]][i[1][1]].config(image=self.SELECT)
                 self.buttons[i[1][0]][i[1][1]].image = self.SELECT
 
-        print("_____")
-        print(self.legalMoves)
-
 
     def prepareMove(self, x, y):       
         if self.legalMoves is None:
@@ -102,7 +99,9 @@ class Game(tk.Frame):
                     self.legalMoves = self.getLegalMovesForPlayer(self.game.currentMove)
                     
                     self.game.checkForWin()
-                    
+                    print(self.game.checkForWin())
+                    print(self.game.win)
+
                     if self.game.win == 0:
                         self.status.delete("1.0", tk.END)
                         self.status.insert(tk.INSERT, "Turn: " + self.players[self.game.currentMove])
@@ -121,11 +120,29 @@ class Game(tk.Frame):
         # Create title
         self.title = tk.Text(self, height=1, width=21)
         self.title.insert(tk.INSERT, "Welcome to Halma!")
-        self.title.grid(row=0, column=0, columnspan=3)
+        self.title.grid(row=0, column=1, columnspan=3)
 
+        # Create turn indicator
         self.status = tk.Text(self, height=1, width=14)
         self.status.insert(tk.INSERT, "Turn: " + self.players[self.game.currentMove])
         self.status.grid(row=0, column=len(self.game.board)-2, columnspan=2)
+
+        letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+        numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+
+        print("Inserting Indicators...")
+
+        self.topIndicators = [-1 for i in range(len(self.game.board))]
+        for i in range(len(self.game.board)):
+            self.topIndicators[i] = tk.Text(self, height=1, width=1)
+            self.topIndicators[i].insert(tk.INSERT, letters[i])
+            self.topIndicators[i].grid(row=1, column=i+1, columnspan=1)
+
+        self.sideIndicators = [-1 for i in range(len(self.game.board))]
+        for i in range(len(self.game.board)):
+            self.sideIndicators[i] = tk.Text(self, height=1, width=1)
+            self.sideIndicators[i].insert(tk.INSERT, numbers[i])
+            self.sideIndicators[i].grid(row=i+2, column=0, rowspan=1)
 
         # Create buttons
         size = len(self.game.board)
@@ -135,7 +152,7 @@ class Game(tk.Frame):
                 self.buttons[i][j] = tk.Button(self, width=50, height=50,
                                                text=str(self.game.board[i][j]), 
                                                command=lambda i=i,j=j: self.prepareMove(i, j))
-                self.buttons[i][j].grid(column=j, row=i+1, sticky=tk.N+tk.S+tk.E+tk.W)
+                self.buttons[i][j].grid(column=j+1, row=i+2, sticky=tk.N+tk.S+tk.E+tk.W)
 
 
 root = tk.Tk()

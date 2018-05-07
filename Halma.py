@@ -246,7 +246,7 @@ class Halma:
                 for j in range(0, 4):
                     if self.board[i][j] == 5:
                         score += 1
-                    elif self.board[i][j] == 3:
+                    elif self.board[i][j] in [3, 4]:
                         openGoals.append((i, j))
 
         elif player == 1:
@@ -254,7 +254,7 @@ class Halma:
                 for j in range(0, len(self.board)):
                     if self.board[i][j] == 4:
                         score += 1
-                    elif self.board[i][j] == 3:
+                    elif self.board[i][j] in [3, 5]:
                         openGoals.append((i, j))
 
         # If score is not 10 (victory), calculate SLD for remaining pieces
@@ -266,7 +266,12 @@ class Halma:
             pieces = []
             for indexI, i in enumerate(self.board):
                 for indexJ, j in enumerate(i):
-                    if j == player:
+                    if j in [player, player + 3]:
+                        if player == 1 and indexI < 3:
+                            continue
+                        elif player == 2 and indexI > 3:
+                            continue
+
                         pieces.append((indexI, indexJ))
 
             freePieces = len(pieces)
@@ -279,7 +284,7 @@ class Halma:
 
                         if dist < shortest[2]:
                             shortest = (i, j, dist)
-               
+              
                 pieces.remove(shortest[0])
                 openGoals.remove(shortest[1])
 

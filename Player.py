@@ -123,12 +123,12 @@ class MiniMax:
         for i in current.children:
             if i.state.getScore(1) == 10 or i.state.getScore(2) == 10:
                 continue
-
+            
             if self.player == 1:
                 evaluate = i.state.getScore(1) - i.state.getScore(2)
             else:
                 evaluate = i.state.getScore(2) - i.state.getScore(1)
-
+            
             if best[0] == None:
                 best = (i, evaluate)
                 continue
@@ -138,7 +138,7 @@ class MiniMax:
             elif not i.minOrMax and best[1] > evaluate:
                 best = (i, evaluate)
                 continue
-
+                
             current.children.remove(i)
 
         self.buildTree(best[0], depth-1)

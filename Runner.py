@@ -108,11 +108,14 @@ class Game(tk.Frame):
                     if self.game.win == 0:
                         self.status.delete("1.0", tk.END)
                         self.status.insert(tk.INSERT, "Turn: " + self.players[self.game.currentMove])
-                        if self.currentMove == self.aiPlayer:
-                            ai = player.Player(self.game, self.aiPlayer)
+                        print(self.aiPlayer)
+                        if self.game.currentMove == self.aiPlayer:
+                            print("Doing AI move...")
+                            ai = Player.Player(self.game, self.aiPlayer)
                             self.game = ai.recommendMove(self.game, self.aiPlayer)
                             self.status.delete("1.0", tk.END)
                             self.status.insert(tk.INSERT, "Turn: " + self.players[self.game.currentMove])
+                            print("AI move Done")
                     else:
                         self.status.delete("1.0", tk.END)
                         self.status.insert(tk.INSERT, "WIN: " + self.players[self.game.currentMove])

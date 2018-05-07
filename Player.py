@@ -55,13 +55,21 @@ class Player():
 class Node:
     def __init__(self, value=None):
         self.value = value
-        self.nextNodes = []
+        self.minOrMax = None
+        self.nextNode = None
+        self.parent = None
 
     def getValue(self):
         return self.value
 
     def getNext():
-        return self.nextNodes
+        return self.nextNode
+
+    def getParent():
+        return self.parent
+
+    def getMinMaxValue():
+
 
 class miniMaxList:
     def __init__(self, root):
@@ -70,4 +78,18 @@ class miniMaxList:
     def addNode(self, newNode):
         if root.value == None:
             self.root = newNode
-            newNode.nextNodes = []
+            newNode.minOrMax = "Max"
+            newNode.next = None
+        else:
+            current = self.root
+            while self.next != None:
+                current.getNext()
+            current.next = newNode
+
+            if current.minOrMax == "Max":
+                newNode.minOrMax = "Min"
+            else:
+                newNode.minOrMax = "Max"
+
+            newNode.parent = current
+            newNode.next = None

@@ -20,27 +20,27 @@ class Player():
         if node.getScore(player) == 10:
             return child
 
-        if node.getChildren() == None:
-            return getScore(player)
+        if node.children == []:
+            return node.state.getScore(player)
 
-        if node.getMinMaxValue(node) == "max":
-            maxScore = getChildren(node)[0].getScore(player)
-            max = getChildren(node)[0]
-            for child in node.getChildren():
-                childMax = minimax(child, player)
-                childMaxScore = childMax.getScore(player)
+        if node.minOrMax == True:
+            maxScore = node.state.getScore(player)
+            max = node.children[0]
+            for child in node.children:
+                childMax = self.minimax(child, player)
+                childMaxScore = childMax.state.getScore(player)
                 if childMaxScore > maxScore:
                     maxScore = childMaxScore
                     max = childMax
 
             return max
 
-        if node.getMinMaxValue(node) == "min":
-            minScore = getChildren(node)[0].getScore(player)
-            min = getChildren(node)[0]
-            for child in node.getChildren():
-                childMin = minimax(child, player)
-                childMinScore = childMin.getScore(player)
+        if node.minOrMax == False:
+            minScore = node.state.getScore(player)
+            min = node.children[0]
+            for child in node.children:
+                childMin = self.minimax(child, player)
+                childMinScore = childMin.state.getScore(player)
                 if childMinScore < minScore:
                     minScore = childMinScore
                     min = childMin
@@ -123,12 +123,12 @@ class MiniMax:
         for i in current.children:
             if i.state.getScore(1) == 10 or i.state.getScore(2) == 10:
                 continue
-            
+
             if self.player == 1:
                 evaluate = i.state.getScore(1) - i.state.getScore(2)
             else:
                 evaluate = i.state.getScore(2) - i.state.getScore(1)
-            
+
             if best[0] == None:
                 best = (i, evaluate)
                 continue
@@ -138,7 +138,7 @@ class MiniMax:
             elif not i.minOrMax and best[1] > evaluate:
                 best = (i, evaluate)
                 continue
-                
+
             current.children.remove(i)
 
         self.buildTree(best[0], depth-1)

@@ -11,8 +11,28 @@ class Player():
         #TODO
         return None
 
-    def minimax():
-        return
+    def minimax(self, node, player):
+        if self.moveTimer < 0.2:
+            return None
+            
+        if node.getChildren() == None:
+            return getScore(player)
+
+        if node.getMinMaxValue(node) == "max":
+            max = getChildren(node)[0]
+            for child in node.getChildren():
+                childMax = minimax(child, player)
+                if childMax > max:
+                    max = childMax
+            return max
+
+        elif node.getMinMaxValue(node) = "min"
+            min = getChildren(node)[0]
+            for child in node.getChildren():
+                childMin = minimax(child, player)
+                if childMin < min:
+                    min = childMin
+            return min
 
     def rankDistanceFromGoal(self, game, player):
         pawns = self.getPawnLocations(game, player)

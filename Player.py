@@ -9,13 +9,15 @@ class Player():
         self.moveTimer = game.tLimit
 
     def recommendMove(self, game, player):
-        miniMaxTree = MiniMax(miniMaxTree.root, player, 10)
-        move = self.minimax(game, player)
-        return move.state
+        miniMaxTree = MiniMax(game, player, 15)
+        move = self.minimax(miniMaxTree.root, player)
+        print(move)
+        return move[1]
 
     def minimax(self, node, player):
 
-        if node.state.getScore(2) == 10:
+        if node.state.getScore(2) - node.state.getScore(1) == 10:
+            print("LOL")
             return (node.state.getScore(2), node.state)
 
         if node.children == []:
@@ -23,15 +25,23 @@ class Player():
 
         if node.minOrMax == True:
             maxScore = (node.state.getScore(2)-node.state.getScore(1), node.state)
+            
+            if(maxScore == 10):
+                maxScore = 10.1
+
             for child in node.children:
                 childMax = self.minimax(child, player)
-                if childMax > maxScore:
+                if childMax[0] >= maxScore[0]:
                     maxScore = (childMax[0], childMax[1])
 
             return maxScore
 
         if node.minOrMax == False:
-            minScore = (node.state.getScore(2)-node.state.getScore(1), node.state)
+            minScore = (node.state.getScore(1)-node.state.getScore(2), node.state)
+            
+            if minScore == 10:
+                minScore = 10.1
+
             for child in node.children:
                 childMin = self.minimax(child, player)
                 if childMin[0] < minScore[0]:
@@ -94,7 +104,7 @@ class MiniMax:
         self.buildTree(self.root, self.depth)
 
     def buildTree(self, current, depth):
-        if depth == 0:
+        if depth == 0 or current == None:
             return
 
         # Get the legal moves for the current player

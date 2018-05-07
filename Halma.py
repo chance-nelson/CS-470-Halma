@@ -259,6 +259,7 @@ class Halma:
 
         # If score is not 10 (victory), calculate SLD for remaining pieces
         if score == 10:
+            print("WTF")
             return 10
 
         else:
@@ -282,13 +283,19 @@ class Halma:
                         # Calculate shortest SLD to goal for piece
                         dist = math.pow(i[0] - j[0], 2) + math.pow(i[1] - j[1], 2)
 
+                        if not shortest[0]:
+                            shortest = (i, j, dist)
+
                         if dist < shortest[2]:
                             shortest = (i, j, dist)
-              
-                pieces.remove(shortest[0])
-                openGoals.remove(shortest[1])
 
-                dist = math.pow(shortest[0][0] - shortest[1][0], 2) - math.pow(shortest[0][1] - shortest[1][1], 2)
+                if shortest[0] and shortest[1]:
+                    pieces.remove(shortest[0])
+                    openGoals.remove(shortest[1])
+                else:
+                    freePieces -= 1
+                    continue
+
                 score += (1 / math.sqrt(shortest[2]))
                 freePieces -= 1
 

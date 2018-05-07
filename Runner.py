@@ -116,6 +116,13 @@ class Game(tk.Frame):
                             self.status.delete("1.0", tk.END)
                             self.status.insert(tk.INSERT, "Turn: " + self.players[self.game.currentMove])
                             print("AI move Done")
+                            self.updateBoard()
+                            if self.aiPlayer == 1:
+                                self.game.currentMove = 2
+                            else:
+                                self.game.currentMove = 1
+
+                            self.legalMoves = self.getLegalMovesForPlayer(self.game.currentMove)
                     else:
                         self.status.delete("1.0", tk.END)
                         self.status.insert(tk.INSERT, "WIN: " + self.players[self.game.currentMove])
